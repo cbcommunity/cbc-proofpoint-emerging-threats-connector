@@ -4,7 +4,7 @@ This is a proof of concept integration with VMware Carbon Black Cloud and Proofp
 Python 3.x
 
 ## Setup
-Edit `config.conf` with your details (API keys, etc.)
+Edit `config.conf` with your details (API keys, etc.)  
 Install the requirements (`pip install -r requirements.txt`)
 
 ## Usage
