@@ -5,7 +5,6 @@
 import os
 import sys
 import logging as log
-import json
 import configparser
 import argparse
 
@@ -20,6 +19,8 @@ et = None
 
 def init():
     '''
+        This is the initialization method which will import the settings from the config file
+            and create objects of the Classes to work with the products.
     '''
 
     global config, cb, et
@@ -78,15 +79,21 @@ def init():
 
 def main():
     '''
+        This integration will pull IOCs (IPs and/or domains) from the Emerging Threats feed.
+        IOCs are restructured and pushed to VMware Carbon Black Cloud.
     '''
     
+    # Intialize
     cb, et, config = init()
 
+    # Get the IOCs from the feed
     iocs = et.get_feed()
+    # Build the CB feed with the IOCs
     reports = cb.build_reports(iocs)
-    log.debug('{0}'.format(json.dumps(reports, indent=4)))
     
+    # Update the name of the feed
     feed_name = 'Proofpoint Emerging Threats {0}'.format(config['category'])
+    # Push the feed to CBC
     cb.push_feed(feed_name, reports)
 
 if __name__ == '__main__':

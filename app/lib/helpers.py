@@ -16,10 +16,12 @@ from cbc_sdk.enterprise_edr import Feed, Report
 
 class CarbonBlackCloud:
     '''
+        This is a class to help with working with the VMware Carbon Black Cloud APIs
     '''
 
     def __init__(self, config, log):
         '''
+            Initialized the class with settings from the config file, and create an object for the SDK.
         '''
 
         try:
@@ -47,7 +49,7 @@ class CarbonBlackCloud:
             )
         
         except Exception as err:
-            self.log(exception(err))
+            self.log.error(err)
 
     def get_feed(self, feed_id=None, feed_name=None):
         '''
@@ -74,6 +76,7 @@ class CarbonBlackCloud:
 
     def build_iocs(self, iocs, ioc_type):
         '''
+            Convert a list of IOCs to the format required by CBC
         '''
         if ioc_type == 'domains':
             field_value = 'netconn_domain'
@@ -99,6 +102,7 @@ class CarbonBlackCloud:
 
     def build_reports(self, iocs):
         '''
+            Build the reports with the correctly formatted IOCs for CBC
         '''
         reports = []
 
@@ -112,6 +116,7 @@ class CarbonBlackCloud:
 
     def build_report(self, iocs, ioc_type, severity, category):
         '''
+            Create a report in the format required by CBC
         '''
         iocs = self.build_iocs(iocs, ioc_type)
 
@@ -129,26 +134,9 @@ class CarbonBlackCloud:
 
         return report
 
-    def import_feed(self, reports, category):
-        '''
-        '''
-        feed = {
-            'feedinfo': {
-                'name': 'Proofpoint Emerging Threats {0}'.format(category),
-                'summary': 'A list of IOCs from the Emerging Threats {0} feed'.format(category),
-                'owner': self.org_key,
-                'provider_url': 'https://emergingthreats.com',
-                'category': 'Partner',
-                'access': 'private'
-            },
-            'reports': reports
-        }
-
-        feed = self.sdk.create(Feed, feed)
-        feed.save(public=False)
-
     def push_feed(self, feed_name, reports):
         '''
+            Push a feed to CBC. Either create a feed or update a feed.
         '''
         feed = self.get_feed(feed_name=feed_name)
         if feed is None:
@@ -159,6 +147,7 @@ class CarbonBlackCloud:
 
     def _create_feed(self, feed_name, reports):
         '''
+            Create a new feed in CBC
         '''
         self.log.info('Feed {0} does not exist. Creating feed.'.format(feed_name))
 
@@ -180,8 +169,9 @@ class CarbonBlackCloud:
 
     def _update_feed(self, feed, reports):
         '''
+            Update an existing feed in CBC
         '''
-        self.log.info('Feed {0} exists ({1}), replacing reports'.format(feed.name, feed.id))
+        self.log.info('Feed "{0}" exists ({1}), replacing reports'.format(feed.name, feed.id))
         reports_obj = [Report(self.sdk, initial_data=report, feed_id=feed.id) for report in reports]
         feed.replace_reports(reports_obj)
         self.log.info('Feed {0} ({1}) was updated.'.format(feed.name, feed.id))
@@ -190,10 +180,13 @@ class CarbonBlackCloud:
 
 class EmergingThreats:
     '''
+        This is a Class for working with Emergin Threats APIs
     '''
     
     def __init__(self, config, log):
         '''
+            Initialize the class with settings from the config file.
+            Output a list of feeds if no feed category is provided.
         '''
 
         try:
@@ -237,7 +230,7 @@ class EmergingThreats:
                 sys.exit(0)
 
             # If the category doesn't match any of the feed names, raise an error
-            if config['category'] not in self.feeds['ip_feeds'] and args.category not in self.feeds['domain_feeds']:
+            if config['category'] not in self.feeds['ip_feeds'] and self.config['category'] not in self.feeds['domain_feeds']:
                 raise('{0} is not a valid feed name. Use --category list for a full list of feeds available.')
 
         except Exception as err:
@@ -245,6 +238,8 @@ class EmergingThreats:
 
     def _get_severity(self, score):
         '''
+            ET outputs severity as 0-127 and CB uses 1-10.
+            This method converts from ET scoring to CB scoring.
         '''
 
         score = round(int(score) * 10 / 127)
@@ -254,6 +249,7 @@ class EmergingThreats:
 
     def _get_categories(self):
         '''
+            Pull the categories file and return in a structured format
         '''
 
         categories = {}
@@ -273,6 +269,7 @@ class EmergingThreats:
 
     def _list_feeds(self):
         '''
+            Pull the feeds and return them in a structured format
         '''
 
         feeds = {
@@ -303,6 +300,7 @@ class EmergingThreats:
 
     def get_feed(self):
         '''
+            Get the contents of a feed and return in a structured format organized by severity
         '''
 
         iocs = {
@@ -316,6 +314,7 @@ class EmergingThreats:
             }
         }
 
+        # Get the 
         if self.config['get_ips']:
             if self.config['category'] not in self.feeds['ip_feeds']:
                 self.log.warning('{0} is not a valid Emerging Threats IP feed. Skipping this request.'.format(self.config['category']))
@@ -336,6 +335,7 @@ class EmergingThreats:
                 else:
                     self.log.error('Error {0}: {1}'.format(r.status_code, r.text))
 
+        # Get the domains IOCs
         if self.config['get_domains']:
             if self.config['category'] not in self.feeds['domain_feeds']:
                 self.log.error('{0} is not a valid Emerging Threats domain feed. Skipping this request.'.format(self.config['category']))
@@ -395,7 +395,7 @@ def convert_time(timestamp):
         return converted_time
 
     except Exception as err:
-        eprint(err)
+        print(err)
 
 def config2dict(config):
     '''
@@ -408,6 +408,7 @@ def config2dict(config):
 
 def clean_url(url):
     '''
+        Take a url and make sure it is formatted correctly
     '''
 
     # if missing protocol, add https

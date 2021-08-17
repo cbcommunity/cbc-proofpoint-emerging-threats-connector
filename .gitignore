@@ -1,4 +1,4 @@
 .python-version
-*.ipynb
+*.ipynb*
 .vscode
 *.log
