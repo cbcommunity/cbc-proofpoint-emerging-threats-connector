@@ -4,13 +4,13 @@
 
 This is an integration between VMware Carbon Black Cloud Enterprise EDR and Proofpoint Emerging threats. Using the command line arguments, a category (feed) of IOCs filtered by severity and type (IPs and/or domains) from Emerging Threats and pushed to a Watchlist in CBC. The watchlist is organized by severity and includes descriptions and tags on the IOCs. These watchlists allow for alerting on your Threat Intelligence throughout your enterprise endpoints.
 ## Requirements
-Python 3.x
-VMware Carbon Black Cloud Enterprise EDR
+Python 3.x  
+VMware Carbon Black Cloud Enterprise EDR  
 Proofpoint Emerging Threats
 
 ## Setup
-Edit `config.conf` with your details (API keys, etc.)  
-Install the requirements (`pip install -r requirements.txt`)
+1. Edit `config.conf` with your details (API keys, etc.)  
+2. Install the requirements (`pip install -r requirements.txt`)
 
 ## Usage
 
