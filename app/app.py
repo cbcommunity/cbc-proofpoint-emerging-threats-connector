@@ -60,10 +60,6 @@ def init():
     parser.add_argument('--ips', action='store_true', default=False, help=helpers['ips'])
     args = parser.parse_args()
 
-    if args.domains is False and args.ips is False:
-        print('\nNeither --ips nor --domains was provided. At least one is required.\n')
-        sys.exit(1)
-
     # Update config with cli arguments
     config['category'] = args.category
     config['severity_limit'] = int(args.severity)
@@ -75,6 +71,10 @@ def init():
 
     # Initialize ET
     et = EmergingThreats(config, log)
+
+    if args.domains is False and args.ips is False:
+        print('\nNeither --ips nor --domains was provided. At least one is required.\n')
+        sys.exit(1)
 
     return cb, et, config
 
