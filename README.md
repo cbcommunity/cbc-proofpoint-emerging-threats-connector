@@ -10,8 +10,20 @@ VMware Carbon Black Cloud Enterprise EDR
 Proofpoint Emerging Threats
 
 ## Setup
-1. Edit `config.conf` with your details (API keys, etc.)  
+
+### Carbon Black Configuration
+1. You will need to create 1 API Access Level and 1 API key (Custom type)
+
+#### Custom Access Level Permissions
+
+|    **Category**   | **Permission Name**   | **.Notation Name**       |        **Create**       |         **Read**        |        **Update**       | **Delete**              |       **Execute**       |
+|:-----------------:|:---------------------:|:------------------------:|:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|
+| Custom Detections | Feeds                 | org.feeds                | :ballot_box_with_check: | :ballot_box_with_check: | :ballot_box_with_check: |                         |                         |
+
 2. Install the requirements (`pip install -r requirements.txt`)
+## Configuration
+
+Edit [`config.conf`](https://github.com/cbcommunity/cbc-proofpoint-emerging-threats-connector/blob/main/app/config.conf) with your details (API keys, etc.)  
 
 ## Usage
 
