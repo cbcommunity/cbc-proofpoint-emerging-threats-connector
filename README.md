@@ -1,13 +1,13 @@
-# VMware Carbon Black Cloud and Proofpoint Emerging Threats Connector
+# VMware Carbon Black Cloud and Proofpoint ET Intelligence Reputation List Connector
 
 ## Overview 
 
-This integration connects VMware Carbon Black Cloud Enterprise EDR with Proofpoint Emerging Threats to provide visibility into the latest threats through a filterable Watchlist in the Carbon Black Cloud console. Using the command line arguments, a category (or feed) of IOCs from Proofpoint Emerging Threats is pushed to a Watchlist in the Carbon Black Cloud. This Watchlist can be organized, filtered and alerted on based on severity and IOC type (IP or domain), and includes descriptions and tags for each IOC.
+This integration connects VMware Carbon Black Cloud Enterprise EDR with Proofpoint ET Intelligence Reputation List to provide visibility into the latest threats through a filterable Watchlist in the Carbon Black Cloud console. Using the command line arguments, a category (or feed) of IOCs from Proofpoint ET Intelligence Reputation List is pushed to a Watchlist in the Carbon Black Cloud. This Watchlist can be organized, filtered and alerted on based on severity and IOC type (IP or domain), and includes descriptions and tags for each IOC.
 
 ## Requirements
 Python 3.x  
 VMware Carbon Black Cloud Enterprise EDR  
-Proofpoint Emerging Threats
+Proofpoint ET Intelligence
 
 ## Setup
 
@@ -23,7 +23,7 @@ Proofpoint Emerging Threats
 2. Install the requirements (`pip install -r requirements.txt`)
 ## Configuration
 
-Edit [`config.conf`](https://github.com/cbcommunity/cbc-proofpoint-emerging-threats-connector/blob/main/app/config.conf) with your details (API keys, etc.)  
+Edit [`config.conf`](https://github.com/cbcommunity/cbc-proofpoint-et-intelligence-reputation-list/blob/main/app/config.conf) with your details (API keys, etc.)  
 
 ## Usage
 
@@ -59,6 +59,7 @@ This will import IPs and domains from the Bitcoin_Related feed with a severity 6
 `python app.py --category TorNode --severity 3 --ips`
 
 This will import IPs from the TorNode feed with a severity of 3 or higher
+
 ## Support
 
 This is an open source integration and is not officially supported. Please open an issue on this repo and we will do our best to update as quickly as possible.
